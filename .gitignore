@@ -1,0 +1,6 @@
+/build
+/dist
+/.generated_files
+/nbproject/Makefile-*
+/nbproject/Package-*
+/nbproject/private/
