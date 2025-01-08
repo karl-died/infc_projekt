@@ -32,6 +32,10 @@ volatile char motorText[] = "Motor:    ";
 
 
 void updateDisplay() {
+    PORTC = (0xF0 & PORTC) | (0x0F & motorCountDown);
+}
+
+void updateTFT() {
     startText[7] = motorCountDown;
     if(motorCountDown == 0) {
         motorText[7] = 'o';
@@ -46,10 +50,6 @@ void updateDisplay() {
     TFT_Print(startText, 6, 10, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
     TFT_Print(motorText, 8, 10, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
     //might work, but haven't tested it
-}
-
-void updateTFT() {
-    PORTC = (0xF0 & PORTC) | (0x0F & motorCountDown);
 }
 
 ISR(PCINT0_vect) {
@@ -188,7 +188,7 @@ int main(void){
 	TFT_Print(mytext1, 8, 45, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);		//Schriftfarbe, Hintergrundfarbe, Display-Orientierung
 	TFT_Print(mytext2, 8, 80, 2, TFT_16BitOrange, TFT_16BitWhite, TFT_Landscape180);   
      */
-    updateDisplay();
+    updateTFT();
     
     while(1){;}
 }
