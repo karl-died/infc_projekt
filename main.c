@@ -27,8 +27,11 @@ volatile uint16_t timer0Counter = 0;
 volatile const uint16_t timer0CounterMax = 60;
 volatile const uint16_t motorPulseWidth = 48;
 
-volatile char startText[] = "Start:  ";
-volatile char motorText[] = "Motor:    ";
+volatile char countDownText[] = "0";
+volatile char onText[] = "on ";
+volatile char offText[] = "off";
+volatile char startText[] = "Start:\0";
+volatile char motorText[] = "Motor:\0";
 
 
 void updateDisplay() {
@@ -36,20 +39,26 @@ void updateDisplay() {
 }
 
 void updateTFT() {
-    startText[7] = motorCountDown;
+    
+    //TFT_Print(hiString, 0, 0, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
+    countDownText[0] = 48 + (char) motorCountDown;
+    
+    TFT_Print(countDownText, 120, 20, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);
+
     if(motorCountDown == 0) {
-        motorText[7] = 'o';
-        motorText[8] = 'f';
-        motorText[9] = 'f';
+        TFT_Print(offText, 120, 60, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);
+        
+        
     } else {
-        motorText[7] = 'o';
-        motorText[8] = 'n';
-        motorText[9] = ' ';
+            TFT_Print(onText, 120, 60, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);
+
     }
     
-    TFT_Print(startText, 6, 10, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
-    TFT_Print(motorText, 8, 10, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
+    TFT_Print(startText, 20, 20, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
+    TFT_Print(motorText, 20, 60, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
     //might work, but haven't tested it
+
+    
 }
 
 ISR(PCINT0_vect) {
