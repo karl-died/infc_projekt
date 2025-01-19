@@ -40,25 +40,19 @@ void updateDisplay() {
 
 void updateTFT() {
     
-    //TFT_Print(hiString, 0, 0, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
+    //convert count down to ascii
     countDownText[0] = 48 + (char) motorCountDown;
     
     TFT_Print(countDownText, 120, 20, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);
 
     if(motorCountDown == 0) {
         TFT_Print(offText, 120, 60, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);
-        
-        
     } else {
-            TFT_Print(onText, 120, 60, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);
-
+        TFT_Print(onText, 120, 60, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);
     }
     
     TFT_Print(startText, 20, 20, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
     TFT_Print(motorText, 20, 60, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);
-    //might work, but haven't tested it
-
-    
 }
 
 ISR(PCINT0_vect) {
@@ -166,11 +160,6 @@ void PWM_init() {
 
 int main(void){
     uint16_t i;
-    /*
-	char mytext[]  = "Media Systems:";
-	char mytext1[] = "Informatik";
-	char mytext2[] = "& Elektronik";
-    */
     DDRB &= ~(1<<DDB1);
     PORTB |= (1<<PORTB1);
     
@@ -186,17 +175,13 @@ int main(void){
     PWM_init();
     Timer2_init(); 
     PCINT1_init();
+    
 	//Display-Hintergrund weiß "färben"
 	for(i=0; i<23232; i++){
 		SPISend8Bit(0xFF);
 		SPISend8Bit(0xFF);
 	}
-    //Schrift uebertragen
-    /*
-    TFT_Print(&mytext[0], 6, 10, 2, TFT_16BitBlue, TFT_16BitWhite, TFT_Landscape180);	//Übergabe von 7 "Werten": Adresse des 1. Elements von mytext, x1, y1, scale, 
-	TFT_Print(mytext1, 8, 45, 2, TFT_16BitRed, TFT_16BitWhite, TFT_Landscape180);		//Schriftfarbe, Hintergrundfarbe, Display-Orientierung
-	TFT_Print(mytext2, 8, 80, 2, TFT_16BitOrange, TFT_16BitWhite, TFT_Landscape180);   
-     */
+    
     updateTFT();
     
     while(1){;}
