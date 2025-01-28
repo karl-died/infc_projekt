@@ -24,7 +24,7 @@ volatile uint16_t counter;
 volatile uint16_t motorCountDown = 0;
 volatile const uint16_t motorTimeS = 9;
 volatile uint16_t timer0Counter = 0;
-volatile const uint16_t timer0CounterMax = 60;
+volatile const uint16_t timer0CounterMax = 100;
 volatile const uint16_t motorPulseWidth = 48;
 
 volatile char countDownText[] = "0";
@@ -105,7 +105,8 @@ void PCINT1_init() {
 }
 
 void Timer2_init(){
-    TCCR2B |= (1<<CS22) | (1<<CS21) | (1<<CS20);    //prescalar 1024
+    TCCR2B |= (1<<CS22) | (1<<CS21) | (1<<CS20); //prescalar 1024
+    TCCR2A |= (1<<WGM21) | (1<<COM2A1);   
     TIMSK2 |= (1<<OCIE2A);
     OCR2A = 157;                        //100Hz funktioniert noch nicht
 }
@@ -155,7 +156,7 @@ void PWM_init() {
     TCCR0B |= (1<<CS01) | (1<<WGM02);
     TCCR0A |= (1<<WGM00) | (1<<COM0B1);
     OCR0A = 80;
-    OCR0B = motorPulseWidth;
+    OCR0B = 0;
 }
 
 int main(void){
@@ -173,7 +174,6 @@ int main(void){
 	sei();
 	Display_init();
     PWM_init();
-    Timer2_init(); 
     PCINT1_init();
     
 	//Display-Hintergrund weiß "färben"
@@ -183,6 +183,7 @@ int main(void){
 	}
     
     updateTFT();
-    
+    Timer2_init(); 
+
     while(1){;}
 }
